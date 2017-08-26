@@ -1,0 +1,28 @@
+{
+  "name": "gameoflife",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikVolosatov/gameOfLife.git"
+  },
+  "author": "nv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NikVolosatov/gameOfLife/issues"
+  },
+  "homepage": "https://github.com/NikVolosatov/gameOfLife#readme",
+
+  "dependencies": {
+  
+  },
+  "devDependencies": {
+   "typescript": "2.4.2",
+   "html-webpack-plugin":"2.30.1",
+    "webpack": "3.3.0"
+  }
+}
