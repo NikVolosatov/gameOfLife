@@ -1,3 +1,6 @@
+import "./styles";
+
+
 window.onload = ()=>{
-    console.log("onload");
+    
 };

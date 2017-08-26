@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    background-color: rgb(38, 38, 38);
+    min-height: 500px;
+}
+
+.container canvas {
+    flex-grow: 1;
+    margin: 10px;
+    border: 1px solid rgba(242, 198, 65, 0.1);
+
+}

@@ -1,12 +1,13 @@
 var path = require('path');
 
-var htmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-    entry: "./app/index.ts",
+    entry: "./app",
     output: {
         filename: "bundle.js",
-        path: "/src",
+        path: path.resolve(__dirname, './src'),
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -23,15 +24,30 @@ module.exports = {
             { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: "css-loader"
+                })
+            }
+
+
         ]
     },
 
-    plugins: [    
-        new HtmlWebpackPlugin ({
-          inject: true,
-          template: 'index.html'
+    plugins: [
+        new ExtractTextPlugin("styles.css"),
+        new HtmlWebpackPlugin({
+            inject: true,
+            template: 'index.html',
+            files: {
+                "css": [ "styles.css" ],
+                "js": [ "assets/bundle.js"]
+            }
         })
-      ]
+    ]
 
 };
