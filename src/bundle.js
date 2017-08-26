@@ -116,8 +116,8 @@ var GameOfLife = (function () {
         this.cellSize = 5;
         this.numberOfRows = 100;
         this.numberOfColumns = 100;
-        this.seedProbability = 0.5;
-        this.tickLength = 2000;
+        this.seedProbability = 0.3;
+        this.tickLength = 100;
         this.canvas = null;
         this.drawingContext = null;
         this.initCanvas();
@@ -127,8 +127,8 @@ var GameOfLife = (function () {
     GameOfLife.prototype.start = function () {
         var _this = this;
         setInterval(function () {
-            _this.drawGrid();
             _this.evolveCellGeneration();
+            _this.drawGrid();
         }, this.tickLength);
     };
     GameOfLife.prototype.initCanvas = function () {
@@ -192,9 +192,14 @@ var GameOfLife = (function () {
         var numberOfAliveNeighbors = 0;
         var rowBounds = this.createNumberArray(lowerRowBound, upperRowBound);
         var columnBounds = this.createNumberArray(lowerColumnBound, upperColumnBound);
-        for (var row = 0; row < rowBounds.length; row++) {
-            for (var column = 0; column < columnBounds.length; column++) {
-                if (row !== cell.row && column !== cell.column && this.currentCellGeneration[row][column].isAlive) {
+        for (var i = 0; i < rowBounds.length; i++) {
+            var currentRow = rowBounds[i];
+            for (var j = 0; j < columnBounds.length; j++) {
+                var currentColumn = columnBounds[j];
+                if (currentRow === cell.row && currentColumn === cell.column) {
+                    continue;
+                }
+                else if (this.currentCellGeneration[currentRow][currentColumn].isAlive) {
                     numberOfAliveNeighbors++;
                 }
             }

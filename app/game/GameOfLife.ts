@@ -7,8 +7,8 @@ export class GameOfLife {
     cellSize: number = 5;
     numberOfRows: number = 100;
     numberOfColumns: number = 100;
-    seedProbability: number = 0.5;
-    tickLength: number = 2000;
+    seedProbability: number = 0.3;
+    tickLength: number = 100;
     canvas: HTMLCanvasElement = null;
     drawingContext: CanvasRenderingContext2D = null;
 
@@ -23,9 +23,10 @@ export class GameOfLife {
 
     public start() {
         setInterval(() => {
-            this.drawGrid();
+
             this.evolveCellGeneration();
-            
+            this.drawGrid();
+
         }, this.tickLength);
     }
 
@@ -107,9 +108,13 @@ export class GameOfLife {
         let rowBounds = this.createNumberArray(lowerRowBound, upperRowBound);
         let columnBounds = this.createNumberArray(lowerColumnBound, upperColumnBound);
 
-        for (var row = 0; row < rowBounds.length; row++) {
-            for (var column = 0; column < columnBounds.length; column++) {
-                if (row !== cell.row && column !== cell.column && this.currentCellGeneration[row][column].isAlive) {
+        for (var i = 0; i < rowBounds.length; i++) {
+            let currentRow = rowBounds[i];
+            for (var j = 0; j < columnBounds.length; j++) {
+                let currentColumn = columnBounds[j]
+                if (currentRow === cell.row && currentColumn === cell.column) {
+                    continue;
+                } else if (this.currentCellGeneration[currentRow][currentColumn].isAlive) {
                     numberOfAliveNeighbors++;
                 }
             }
