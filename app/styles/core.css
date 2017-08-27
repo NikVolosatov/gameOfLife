@@ -1,11 +1,63 @@
-.container {
-    display: flex;
-    justify-content: center;
+body {
     background-color: rgb(38, 38, 38);
+    padding: 20px;
 }
 
-.container canvas {
+.button {
+    background-color: #FEE039;
+    color: #282120;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    box-sizing: border-box;
+    user-select: none;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    vertical-align: top;
+    min-width: 80px;
+    height: 32px;
+    font-size: 14px;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    text-decoration: none;
+    padding: 0px 16px;
+    outline: transparent;
+}
+
+.button:hover {
+    background-color: #E5C101;
+    color: #282120;
+}
+
+.button:active {
+    background-color:#FEE767 ;
+    color: #282120;
+}
+
+.container .actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.container .actions .generation{
+    color: #FEE039;
+    font-size: larger;
+}
+
+.container .actions button {
+    flex-basis: 100px;
+}
+
+.container .canvas-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.canvas-container canvas {
     margin: 10px;
     border: 1px solid rgba(242, 198, 65, 0.1);
-
 }

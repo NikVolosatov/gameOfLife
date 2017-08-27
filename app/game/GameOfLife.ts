@@ -1,38 +1,88 @@
 import { Cell } from "./Cell";
-
+import { Painter } from "./Painter";
 
 export class GameOfLife {
 
     currentCellGeneration: Cell[][] = null;
-    cellSize: number = 5;
-    numberOfRows: number = 100;
+    generationNumber: number = null;
+    interval: number = null;
+    cellSize: number = 10;
+    numberOfRows: number = 50;
     numberOfColumns: number = 100;
-    seedProbability: number = 0.3;
-    tickLength: number = 100;
+    tickLength: number = 60;
     canvas: HTMLCanvasElement = null;
     drawingContext: CanvasRenderingContext2D = null;
+
+    painter: Painter = null;
+
+    newGenerationCallback: (number) => void;
+
+    public get isGaming(): boolean {
+        return this.interval !== null;
+    }
+
+
 
 
     constructor() {
         this.initCanvas();
         this.seed();
-
         this.drawGrid();
 
+        this.painter = new Painter(this.canvas, this.hitCallback);
+
+        this.painter.ensurePaint();
+        this.generationNumber = 0;
     }
 
     public start() {
-        setInterval(() => {
+        if (!this.isGaming) {
+            this.painter.preventPaint();
+            this.interval = setInterval(() => {
 
-            this.evolveCellGeneration();
-            this.drawGrid();
+                this.evolveCellGeneration();
+                this.drawGrid();
 
-        }, this.tickLength);
+            }, this.tickLength);
+        }
+    }
+
+    public clear() {
+        this.seed();
+        this.drawGrid();
+        this.painter.ensurePaint();
+
+        this.generationNumber = 0;
+
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+    }
+
+    private hitCallback = (mouse: { x: number; y: number }) => {
+        let cellColumn = Math.round(mouse.x / this.cellSize);
+        let cellRow = Math.round(mouse.y / this.cellSize);
+
+        if (cellColumn === this.numberOfColumns) {
+            cellColumn--;
+        }
+
+        if (cellRow === this.numberOfRows) {
+            cellRow--;
+        }
+        let cell = this.currentCellGeneration[cellRow][cellColumn];
+
+        if (!cell.isAlive) {
+            cell.isAlive = !cell.isAlive;
+            this.drawCell(cell);
+        }
+
     }
 
     private initCanvas() {
         this.canvas = document.createElement("canvas");
-        document.getElementsByClassName("container")[0].appendChild(this.canvas);
+        document.getElementsByClassName("canvas-container")[0].appendChild(this.canvas);
 
         this.canvas.height = this.cellSize * this.numberOfRows;
         this.canvas.width = this.cellSize * this.numberOfColumns;
@@ -44,7 +94,8 @@ export class GameOfLife {
         this.currentCellGeneration = [];
 
         this.crawlCells((row, column) => {
-            this.currentCellGeneration[row][column] = new Cell(row, column, Math.random() < this.seedProbability);
+            //this.currentCellGeneration[row][column] = new Cell(row, column, Math.random() < this.seedProbability);
+            this.currentCellGeneration[row][column] = new Cell(row, column, false);
         }, (row) => {
             this.currentCellGeneration[row] = [];
         });
@@ -83,6 +134,12 @@ export class GameOfLife {
         });
 
         this.currentCellGeneration = newGeneration;
+
+        this.generationNumber++;
+
+        if(this.newGenerationCallback){
+            this.newGenerationCallback(this.generationNumber);
+        }
     }
 
     private evolveCell(cell: Cell) {
